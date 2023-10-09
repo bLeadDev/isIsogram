@@ -55,5 +55,6 @@ bool is_isogram(const char phrase[]){
             return false;
         }
     }
+
     return true;
 }
