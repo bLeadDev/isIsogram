@@ -16,50 +16,35 @@ typedef struct
 
 bool is_isogram(const char phrase[]){
     if(NULL == phrase)
-    {
         return true;
-    }
 
     if(!(*phrase))
-    {
         return true;
-    }
 
     isogram_data_t isogramData[ISOGRAM_UNIQUE_LETTERS_MAX] = { 0 };
-    
     int uniqueCnt = 0;
-    isogramData[uniqueCnt].c = *phrase;
-    isogramData[uniqueCnt].cnt = 1;
-    uniqueCnt++;
-    phrase++;
 
-    while(*phrase)
+    while(*phrase &&  uniqueCnt < ISOGRAM_UNIQUE_LETTERS_MAX)
     {
-        bool newLetterFound = false;
-        //search for new letter
-        for(int i = 0; i < uniqueCnt; i++)
-        {
+        bool letterCntIncreased = false;
+        
+        for(int i = 0; i < uniqueCnt; ++i)
+        {//search for existing letter in list
             if(isogramData[i].c == *phrase)
-            {//new letter found
-                isogramData[i].cnt++;
-                newLetterFound = true;
+            {//letter found, increase count
+                isogramData[i].cnt += 1;
+                letterCntIncreased = true;
                 break;
             }
         }
 
-        if(!newLetterFound)
-        {
+        if(!letterCntIncreased)
+        {//letter not in list, add letter
             isogramData[uniqueCnt].c = *phrase;
-            isogramData[uniqueCnt].cnt++; 
-            uniqueCnt++;
-            newLetterFound = false;
+            isogramData[uniqueCnt].cnt += 1; 
+            uniqueCnt += 1;
         }
-        phrase++;
-    }
-
-    for(int  i = 0; i < uniqueCnt; i++)
-    {
-        printf("char: %c \tcnt: %d\t\n", isogramData[i].c, isogramData[i].cnt);
+        phrase += 1;
     }
 
     int countForIsogram = isogramData[0].cnt;
