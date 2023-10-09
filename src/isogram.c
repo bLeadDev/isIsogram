@@ -14,9 +14,11 @@ typedef struct
     /* data */
 }isogram_data_t;
 
-
 bool is_isogram(const char phrase[]){
-    //printf("Phrase: %s\t\t", ph);
+    if(NULL == phrase)
+    {
+        return true;
+    }
 
     if(!(*phrase))
     {
@@ -30,23 +32,27 @@ bool is_isogram(const char phrase[]){
     isogramData[uniqueCnt].cnt = 1;
     uniqueCnt++;
     phrase++;
+
     while(*phrase)
     {
+        bool newLetterFound = false;
         //search for new letter
         for(int i = 0; i < uniqueCnt; i++)
         {
-            if(isogramData[i].c != *phrase)
+            if(isogramData[i].c == *phrase)
             {//new letter found
-                isogramData[i].c = *phrase;
-                isogramData[i].cnt++; 
-                uniqueCnt++;
-            }else if(isogramData[i].c == *phrase)
-            {//existing letter found
                 isogramData[i].cnt++;
-            }else
-            {// should never be executed
-                usr_assert("Error in is_isogram");
+                newLetterFound = true;
+                break;
             }
+        }
+
+        if(!newLetterFound)
+        {
+            isogramData[uniqueCnt].c = *phrase;
+            isogramData[uniqueCnt].cnt++; 
+            uniqueCnt++;
+            newLetterFound = false;
         }
         phrase++;
     }
@@ -60,7 +66,10 @@ bool is_isogram(const char phrase[]){
     for(int i = 1; i < uniqueCnt; i++)
     {
         if(isogramData[i].cnt != countForIsogram)
+        {
             return false;
+        }
     }
+
     return true;
 }
